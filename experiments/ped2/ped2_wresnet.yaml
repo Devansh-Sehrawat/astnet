@@ -1,0 +1,40 @@
+GPUS: (0,1,2,3)
+WORKERS: 4
+PRINT_FREQ: 25   #多久输出一次信息
+
+DATASET:
+  DATASET: ped2
+  ROOT: 'dataset/'
+  TRAINSET: 'train'
+  TESTSET: 'test'
+  NUM_FRAMES: 5  #包含的帧数
+  FRAME_STEPS: 2  #每个帧之间的时间间隔
+  LOWER_BOUND: 100 #区间下限
+
+TRAIN:
+  BATCH_SIZE_PER_GPU: 4
+  SHUFFLE: true
+  BEGIN_EPOCH: 0
+  END_EPOCH: 2
+  RESUME: true #模型恢复
+  OPTIMIZER: 'adam'
+  LR_TYPE: 'multistep'    # 'linear'  多步骤学习率衰减
+  LR: 0.0002
+  LR_STEP: [80,100] #学习率调整步数  在第80个epoch和第100个epoch时，学习率衰减
+
+TEST:
+  BATCH_SIZE_PER_GPU: 1
+
+MODEL:
+  NAME: 'wrn38'
+  INIT_WEIGHTS: true
+  PRETRAINED: 'datasets/seg_weights/wider_resnet38.pth.tar'
+#  SIGMA: 1.0
+  IMAGE_SIZE:
+    - 224 #288 #192
+    - 288 #480 #320
+  MEMORY_SIZE: 5
+  ENCODED_FRAMES: 4
+  DECODED_FRAMES: 0
+  EXTRA:
+    FINAL_CONV_KERNEL: 3
